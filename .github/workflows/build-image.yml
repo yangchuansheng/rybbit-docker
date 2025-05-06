@@ -70,17 +70,6 @@ jobs:
           repository: rybbit-io/rybbit
           ref: ${{ needs.get-latest-tag.outputs.tag }}
 
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          # list of Docker images to use as base name for tags
-          images: |
-            ghcr.io/${{ github.actor }}/rybbit-server
-          tags: |
-            type=ref,event=tag
-            type=raw,value=${{ needs.get-latest-tag.outputs.tag }}
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -100,6 +89,17 @@ jobs:
       #  with:
       #    strip_v: true # Optional: Remove 'v' character from version
 
+      - name: server Docker meta
+        id: server-meta
+        uses: docker/metadata-action@v5
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            ghcr.io/${{ github.actor }}/rybbit-server
+          tags: |
+            type=ref,event=tag
+            type=raw,value=${{ needs.get-latest-tag.outputs.tag }}
+
       - name: Build and push server Docker images to ghcr.io
         uses: docker/build-push-action@v5
         with:
@@ -108,8 +108,19 @@ jobs:
           context: ./server
           file: ./server/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.server-meta.outputs.tags }}
+          labels: ${{ steps.server-meta.outputs.labels }}
+
+      - name: client Docker meta
+        id: client-meta
+        uses: docker/metadata-action@v5
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            ghcr.io/${{ github.actor }}/rybbit-client
+          tags: |
+            type=ref,event=tag
+            type=raw,value=${{ needs.get-latest-tag.outputs.tag }}
 
       - name: Build and push client Docker images to ghcr.io
         uses: docker/build-push-action@v5
@@ -119,5 +130,5 @@ jobs:
           context: ./client
           file: ./client/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.client-meta.outputs.tags }}
+          labels: ${{ steps.client-meta.outputs.labels }}
