@@ -13,6 +13,8 @@ jobs:
   get-latest-tag:
     name: Get latest tag
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - name: Checkout Rybbit
         uses: actions/checkout@v4
