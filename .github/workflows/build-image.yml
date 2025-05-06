@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: write
-      contents: read
+      repository-projects: write
+      contents: write
       packages: write
     steps:
       - name: Checkout Rybbit
