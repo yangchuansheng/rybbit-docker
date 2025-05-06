@@ -1,4 +1,4 @@
-name: Build and push Rybbit Docker image
+name: Build and push latest Rybbit Docker image
 
 on:
   workflow_dispatch:
