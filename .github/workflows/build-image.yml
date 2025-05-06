@@ -15,9 +15,17 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: write
-      repository-projects: write
+      checks: write
       contents: write
+      deployments: write
+      discussions: write
+      issues: write
+      pages: write
       packages: write
+      pull-requests: write
+      repository-projects: write
+      security-events: write
+      statuses: write
     steps:
       - name: Checkout Rybbit
         uses: actions/checkout@v4
