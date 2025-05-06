@@ -66,6 +66,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
+          repository: rybbit-io/rybbit
           ref: ${{ needs.get-latest-tag.outputs.tag }}
 
       - name: Docker meta
