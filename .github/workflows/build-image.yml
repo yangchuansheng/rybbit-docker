@@ -1,4 +1,4 @@
-name: Build and push anki-sync-server Docker image
+name: Build and push Rybbit Docker image
 
 on:
   workflow_dispatch:
@@ -61,8 +61,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ${{ secrets.DOCKER_USERNAME }}/rybbit-server
-            ghcr.io/${{ github.repository_owner }}/rybbit-server
+            ghcr.io/${{ github.actor }}/rybbit-server
           tags: |
             type=ref,event=tag
             type=raw,value=${{ needs.get-latest-tag.outputs.tag }}
