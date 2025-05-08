@@ -19,6 +19,9 @@ jobs:
           fetch-depth: 0
           repository: rybbit-io/rybbit
 
+      - name: fix api
+        run: sed -i "s@\"/add-site\"@\"/api/add-site\"@g" server/src/index.ts
+
       - name: Get current date and time
         id: datetime
         run: echo "datetime=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
