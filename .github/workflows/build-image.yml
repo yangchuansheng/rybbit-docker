@@ -70,6 +70,16 @@ jobs:
           repository: rybbit-io/rybbit
           ref: ${{ needs.get-latest-tag.outputs.tag }}
 
+      - name: Support Resend
+        run: |
+          sed -i '/export const IS_CLOUD = process.env.CLOUD === "true";/a \
+            export const RESEND_API_KEY = process.env.RESEND_API_KEY ?? false; \
+            export const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? "Rybbit <onboarding@app.rybbit.io>";' server/src/lib/const.ts
+          sed -i 's/import { IS_CLOUD } from ".\/const.js";/import { RESEND_API_KEY, RESEND_FROM_EMAIL } from ".\/const.js";/' server/src/lib/resend.ts
+          sed -i 's/if (IS_CLOUD)/if (RESEND_API_KEY !== false)/g' server/src/lib/resend.ts
+          sed -i 's/Resend(process.env.RESEND_API_KEY)/Resend(RESEND_API_KEY)/g' server/src/lib/resend.ts
+          sed -i 's/from: "Rybbit <onboarding@app.rybbit.io>"/from: RESEND_FROM_EMAIL/g' server/src/lib/resend.ts
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -95,7 +105,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ghcr.io/${{ github.actor }}/rybbit-server
+            ghcr.io/${{ github.actor }}/rybbit-backend
           tags: |
             type=ref,event=tag
             type=raw,value=${{ needs.get-latest-tag.outputs.tag }}
